@@ -1,0 +1,128 @@
+<mvc:View
+    controllerName="vcm.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+        class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--content"
+    >
+        <content>
+            <VBox
+                id="_IDGenVBox1"
+                class="sapUiLargeMarginTop"
+               >
+                <HBox id="_IDGenHBox2"
+                    wrap="Wrap" justifyContent="Start"
+                    
+                 >
+                    <VBox id="_IDGenHBox" class="sapUiSmallMarginEnd">
+                        <Label id="_IDGenLabel2" text="Document:"></Label>
+                        <Input
+                            id="_IDGenInput"
+                           showValueHelp="true"
+                            
+                        />
+                    </VBox>
+                    <VBox id="_IDGenVBox" class="sapUiSmallMarginEnd">
+                        <Label
+                            id="_IDGenLabel"
+                            text="Document Type:"
+                        />
+                        <Input id="_IDGenInput2" showValueHelp="true"/>
+                    </VBox>
+                    <VBox id="_IDGenVBox11" class="sapUiSmallMarginEnd">
+                        <Label
+                            id="_IDGenLabel1"
+                            text="Source system:"
+                        />
+                        <Input id="_IDGenInput21" showValueHelp="true"/>
+                    </VBox>
+                     <VBox id="_IDGenVBox2" class="sapUiSmallMarginEnd">
+                        <Label id="_IDGenLabel11" text="Processing Stage" />
+
+                        <Input id="_IDGenInput1" />
+                    </VBox>
+                    
+                      <VBox id="_IDGenVBox3" justifyContent="End">
+                        <Button id="_IDGenButton" text="Go" press="onPress"></Button>
+                        </VBox>
+                                     
+                </HBox>
+                                            
+            </VBox>
+          
+            <Table
+                id="documentTable"
+                items="{/ZC_IC_HUB_DF}"
+                visible="false"
+                growing="true"
+            >
+                <headerToolbar>
+                    <Toolbar id="_IDGenToolbar1">
+                        <Title
+                            id="_IDGenTitle"
+                            text="{i18n>tableTitle}"
+                        />
+                    </Toolbar>
+                </headerToolbar>
+                <columns>
+                    <Column id="_IDGenColumn">
+                        <Text
+                            id="_IDGenText"
+                            text="{i18n>documentType}"
+                        />
+                    </Column>
+                    <Column id="_IDGenColumn1">
+                        <Text
+                            id="_IDGenText1"
+                            text="{i18n>documentNumber}"
+                        />
+                    </Column>
+                    <Column id="_IDGenColumn2">
+                        <Text
+                            id="_IDGenText2"
+                            text="{i18n>sourceSystem}"
+                        />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem id="_IDGenColumnListItem"  type="Active" press="onDocPress">
+                        <cells>
+                            <Text
+                                id="_IDGenText3"
+                                text="{PredObjectType}"
+                            />
+                            <Text
+                                id="_IDGenText4"
+                                text="{PredDocument}"
+                            />
+                            <Text
+                                id="_IDGenText5"
+                                text="{PredSystem}"
+                            />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+
+            <!-- <List 
+            id="documentTable"
+            items="{/ZC_IC_HUB_DF}"
+            visible="false"
+            mode="SingleSelectMaster">
+            <items>
+                <StandardListItem 
+                id="_IDGenListItem"
+                        title="{InitiatingDocument}"
+                        description="{ProcessType}"
+                        info="{ProcessingStage}"
+                        infoState="{= ${ProcessingStage} === 'Completed' ? 'Success' : 'None'}"
+                        type="Navigation"
+                ></StandardListItem>
+            </items>
+            </List> -->
+        </content>
+    </Page>
+</mvc:View>
