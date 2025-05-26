@@ -1,24 +1,22 @@
-# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
-
 specVersion: "3.1"
 metadata:
-  name: vcm
+  name: phoron.prototype
 type: application
 server:
   customMiddleware:
     - name: fiori-tools-proxy
       afterMiddleware: compression
       configuration:
-        ignoreCertError: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
+        ignoreCertError: false
+        backend:
+          - path: /sap
+            url: https://my405452-api.s4hana.cloud.sap
+            destination: XR9_080_Dev_SAML
         ui5:
           path:
             - /resources
             - /test-resources
           url: https://ui5.sap.com
-        backend:
-          - path: /sap
-            url: https://e585c878-140f-4c57-ae5a-b224dcbf7dfb.abap.ap21.hana.ondemand.com
-            destination: abap-cloud-default_abap-trial-cec663e8trial-dev
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:
@@ -28,5 +26,5 @@ server:
     - name: fiori-tools-preview
       afterMiddleware: fiori-tools-appreload
       configuration:
-        flp:
-          theme: sap_horizon
+        component: phoron.prototype
+        ui5Theme: sap_fiori_3

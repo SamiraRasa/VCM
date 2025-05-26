@@ -1,0 +1,149 @@
+<mvc:View
+    displayBlock="true"
+    controllerName="phoron.prototype.controller.List"
+    height="100%"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:t="sap.ui.table"
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+>
+    <f:DynamicPage
+        id="dynamicPageId"
+        toggleHeaderOnTitleClick="false"
+    >
+        <!-- <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <Title text="Value Chain Monitor" />
+                </f:heading>
+            </f:DynamicPageTitle>
+        </f:title> -->
+
+        <f:header>
+            <f:DynamicPageHeader pinnable="true">
+                <f:content>
+                    <fb:FilterBar
+                        id="filterBar"
+                        search=".onSearch"
+                        useToolbar="false"
+                        showGoOnFB="true"
+                        showFilterConfiguration="false"
+                        persistencyKey="perkeyFilterbar"
+                    >
+                        <fb:filterGroupItems>
+                            <fb:FilterGroupItem
+                                groupName="G1"
+                                name="A"
+                                label="{i18n>docIdLbl}"
+                                visibleInFilterBar="true"
+                            >
+                                <fb:control>
+                                    <Input id="docIdInput" />
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem
+                                groupName="G2"
+                                name="B"
+                                label="{i18n>docTypeLbl}"
+                                visibleInFilterBar="true"
+                            >
+                                <fb:control>
+                                    <Select
+                                        id="docTypeSelect"
+                                        forceSelection="false"
+                                    >
+                                        <core:Item
+                                            key=""
+                                            text=""
+                                        />
+                                        <core:Item
+                                            key="SO"
+                                            text="Sales Order"
+                                        />
+                                        <core:Item
+                                            key="PO"
+                                            text="Purchase Order"
+                                        />
+                                        <core:Item
+                                            key="DN"
+                                            text="Delivery Note"
+                                        />
+                                    </Select>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem
+                                groupName="G3"
+                                name="C"
+                                label="{i18n>sourceSystLbl}"
+                                visibleInFilterBar="true"
+                            >
+                                <fb:control>
+                                    <Select
+                                        id="sourceSystSelect"
+                                        forceSelection="false"
+                                    >
+                                        <core:Item
+                                            key=""
+                                            text=""
+                                        />
+                                        <core:Item
+                                            key="S1"
+                                            text="ECC"
+                                        />
+                                        <core:Item
+                                            key="S2"
+                                            text="S/4 private"
+                                        />
+                                        <core:Item
+                                            key="S3"
+                                            text="S/4 public"
+                                        />
+                                    </Select>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                        </fb:filterGroupItems>
+                    </fb:FilterBar>
+                </f:content>
+            </f:DynamicPageHeader>
+        </f:header>
+
+        <f:content>
+            <Table
+                id="documentsTable"
+                mode="SingleSelectMaster"
+                itemPress="onListItemPress"
+                inset="false"
+                items="{
+					path: 'localModel>/DocumentList',
+					sorter: {
+						path: 'Document'
+					}
+				}"
+                class="sapFDynamicPageAlignContent"
+                width="auto"
+            >
+                <columns>
+                    <Column width="12em">
+                        <Text text="Document" />
+                    </Column>
+                    <Column>
+                        <Text text="Source System" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem type="Navigation">
+                        <cells>
+                            <ObjectIdentifier
+                                title="{localModel>Document}"
+                                text="{localModel>DocumentType}"
+                            />
+                            <Text text="{localModel>SourceSystem}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </f:content>
+    </f:DynamicPage>
+</mvc:View>

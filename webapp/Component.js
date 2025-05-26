@@ -1,26 +1,41 @@
 sap.ui.define([
-    "sap/ui/core/UIComponent",
-    "vcm/model/models"
-], (UIComponent, models) => {
-    "use strict";
+	"sap/ui/core/UIComponent",
+	"sap/ui/model/json/JSONModel",
+	"sap/f/library",
+	"sap/f/FlexibleColumnLayoutSemanticHelper"
+], function (UIComponent, JSONModel, library, FlexibleColumnLayoutSemanticHelper) {
+	"use strict";
 
-    return UIComponent.extend("vcm.Component", {
-        metadata: {
-            manifest: "json",
-            interfaces: [
-                "sap.ui.core.IAsyncContentCreation"
-            ]
-        },
+	var LayoutType = library.LayoutType;
 
-        init() {
-            // call the base component's init function
-            UIComponent.prototype.init.apply(this, arguments);
+	return UIComponent.extend("phoron.prototype.Component", {
+		metadata: {
+			manifest: "json"
+		},
 
-            // set the device model
-            this.setModel(models.createDeviceModel(), "device");
+		init: function () {
+			UIComponent.prototype.init.apply(this, arguments);
+			
+			var oModel = new JSONModel();
+			this.setModel(oModel);
 
-            // enable routing
-            this.getRouter().initialize();
-        }
-    });
+			this.getRouter().initialize();
+		},
+
+		/**
+		 * Returns an instance of the semantic helper
+		 * @returns {sap.f.FlexibleColumnLayoutSemanticHelper} An instance of the semantic helper
+		 */
+		getHelper: function () {
+			var oFCL = this.getRootControl().byId("fcl"),
+				oParams = new URLSearchParams(window.location.search),
+				oSettings = {
+					defaultTwoColumnLayoutType: LayoutType.TwoColumnsMidExpanded,
+					initialColumnsCount: oParams.get("initial"),
+					maxColumnsCount: oParams.get("max")
+				};
+
+			return FlexibleColumnLayoutSemanticHelper.getInstanceFor(oFCL, oSettings);
+		}
+	});
 });

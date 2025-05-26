@@ -1,135 +1,125 @@
 {
-  "_version": "1.65.0",
-  "sap.app": {
-    "id": "vcm",
-    "type": "application",
-    "i18n": "i18n/i18n.properties",
-    "applicationVersion": {
-      "version": "0.0.1"
-    },
-    "title": "{{appTitle}}",
-    "description": "{{appDescription}}",
-    "resources": "resources.json",
-    "sourceTemplate": {
-      "id": "@sap/generator-fiori:basic",
-      "version": "1.17.5",
-      "toolsId": "67907069-b3c0-43e5-b247-824afcf1c52d"
-    },
-    "dataSources": {
-      "ZUI_IC_HUB_DF_O2_VAN": {
-        "uri": "/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Annotations(TechnicalName='ZUI_IC_HUB_DF_O2_VAN',Version='0001')/$value/",
-        "type": "ODataAnnotation",
-        "settings": {
-          "localUri": "localService/mainService/ZUI_IC_HUB_DF_O2_VAN.xml"
-        }
-      },
-      "mainService": {
-        "uri": "/sap/opu/odata/sap/ZUI_IC_HUB_DF_O2/",
-        "type": "OData",
-        "settings": {
-          "annotations": [
-            "ZUI_IC_HUB_DF_O2_VAN"
-          ],
-          "localUri": "localService/mainService/metadata.xml",
-          "odataVersion": "2.0"
-        }
-      }
-    }
-  },
-  "sap.ui": {
-    "technology": "UI5",
-    "icons": {
-      "icon": "",
-      "favIcon": "",
-      "phone": "",
-      "phone@2": "",
-      "tablet": "",
-      "tablet@2": ""
-    },
-    "deviceTypes": {
-      "desktop": true,
-      "tablet": true,
-      "phone": true
-    }
-  },
-  "sap.ui5": {
-    "flexEnabled": true,
-    "dependencies": {
-      "minUI5Version": "1.133.3",
-      "libs": {
-        "sap.m": {},
-        "sap.ui.core": {}
-      }
-    },
-    "contentDensities": {
-      "compact": true,
-      "cozy": true
-    },
-    "models": {
-      "i18n": {
-        "type": "sap.ui.model.resource.ResourceModel",
-        "settings": {
-          "bundleName": "vcm.i18n.i18n"
-        }
-      },
-      "": {
-        "dataSource": "mainService",
-        "preload": true,
-        "settings": {}
-      }
-    },
-    "resources": {
-      "css": [
-        {
-          "uri": "css/style.css"
-        }
-      ]
-    },
-    "routing": {
-      "config": {
-        "routerClass": "sap.m.routing.Router",
-        "controlAggregation": "pages",
-        "controlId": "app",
-        "transition": "slide",
-        "type": "View",
-        "viewType": "XML",
-        "path": "vcm.view",
-        "async": true,
-        "viewPath": "vcm.view"
-      },
-      "routes": [
-        {
-          "name": "RouteMain",
-          "pattern": ":?query:",
-          "target": [
-            "TargetMain"
-          ]
+    "_version": "1.38.0",
+    "sap.app": {
+        "id": "phoron.prototype",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "1.0.0"
         },
-        {
-          "name": "Details",
-          "pattern": "Details/{id}",
-          "target": [
-            "TargetDetails"
-          ]
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "sourceTemplate": {
+            "id": "@sap/ux-app-migrator:freestyle",
+            "version": "1.17.5",
+            "toolsId": "a06940d6-9563-4bbf-a789-428bff78a609"
         }
-      ],
-      "targets": {
-        "TargetMain": {
-          "id": "Main",
-          "name": "Main"
-        },
-        "TargetDetails":{
-          "id": "Details",
-          "name": "Details"
-        }
-
-      }
     },
-    "rootView": {
-      "viewName": "vcm.view.App",
-      "type": "XML",
-      "id": "App",
-      "async": true
+    "sap.ui5": {
+        "rootView": {
+            "viewName": "phoron.prototype.view.FlexibleColumnLayout",
+            "type": "XML",
+            "async": true,
+            "id": "fcl"
+        },
+        "dependencies": {
+            "minUI5Version": "1.98.0",
+            "libs": {
+                "sap.f": {},
+                "sap.m": {},
+                "sap.ui.core": {},
+                "sap.ui.layout": {},
+                "sap.uxap": {}
+            }
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "phoron.prototype.i18n.i18n"
+                }
+            },
+            "localModel": {
+                "type": "sap.ui.model.json.JSONModel",
+                "settings": {},
+                "preload": false
+            },
+            "layoutModel": {
+                "type": "sap.ui.model.json.JSONModel",
+                "settings": {},
+                "preload": false
+            }
+        },
+        "config": {
+            "fullWidth": true
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.f.routing.Router",
+                "type": "View",
+                "viewType": "XML",
+                "path": "phoron.prototype.view",
+                "controlId": "fcl",
+                "transition": "slide",
+                "bypassed": {},
+                "async": true
+            },
+            "routes": [
+                {
+                    "pattern": ":layout:",
+                    
+                    "name": "list",
+                    "target": [
+                        "list"
+                    ]
+                },
+                {
+                    "pattern": "detail/{document}/{layout}",
+                    "name": "detail",
+                    "target": [
+                        "detail"
+                    ]
+                },
+                {
+                    "pattern": "detailDetail/{mainDocument}/{document}/{layout}",
+                    "name": "detailDetail",
+                    "target": [
+                        "detail",
+                        "detailDetail"
+                    ]
+                },
+                {
+                    "pattern": "detailDetailDetail/{category}/{product}/{supplier}/{layout}",
+                    "name": "detailDetailDetail",
+                    "target": [
+                        "detail",
+                        "detailDetail",
+                        "detailDetailDetail"
+                    ]
+                }
+            ],
+            "targets": {
+                "list": {
+                    "name": "List",
+                    "viewType": "XML",
+                    "controlAggregation": "beginColumnPages"
+                },
+                "detail": {
+                    "name": "Detail",
+                    "viewType": "XML",
+                    "controlAggregation": "beginColumnPages"
+                },
+                "detailDetail": {
+                    "name": "DetailDetail",
+                    "viewType": "XML",
+                    "controlAggregation": "midColumnPages"
+                },
+                "detailDetailDetail": {
+                    "name": "DetailDetailDetail",
+                    "viewType": "XML",
+                    "controlAggregation": "endColumnPages"
+                }
+            }
+        }
     }
-  }
 }

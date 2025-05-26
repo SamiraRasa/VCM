@@ -1,0 +1,116 @@
+<mvc:View
+    displayBlock="true"
+    controllerName="phoron.prototype.controller.DetailDetail"
+    height="100%"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+>
+    <f:DynamicPage toggleHeaderOnTitleClick="false">
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <Title text="{detailDetailView>/document}" />
+                </f:heading>
+                <f:expandedContent>
+                    <Label text="{detailDetailView>/documentType}" />
+                </f:expandedContent>
+                <f:snappedContent>
+                    <Label text="{detailDetailView>/documentType}" />
+                </f:snappedContent>
+                <f:snappedTitleOnMobile>
+                    <Title text="{detailDetailView>/documentType}" />
+                </f:snappedTitleOnMobile>
+                <f:navigationActions>
+                    <OverflowToolbarButton
+                        type="Transparent"
+                        icon="sap-icon://full-screen"
+                        press="handleFullScreen"
+                        id="enterFullScreenBtn"
+                        tooltip="Enter Full Screen Mode"
+                        visible="{= ${/actionButtonsInfo/midColumn/fullScreen} !== null }"
+                    />
+                    <OverflowToolbarButton
+                        type="Transparent"
+                        icon="sap-icon://exit-full-screen"
+                        press="handleExitFullScreen"
+                        id="exitFullScreenBtn"
+                        tooltip="Exit Full Screen Mode"
+                        visible="{= ${/actionButtonsInfo/midColumn/exitFullScreen} !== null }"
+                    />
+                    <OverflowToolbarButton
+                        type="Transparent"
+                        icon="sap-icon://decline"
+                        press="handleClose"
+                        tooltip="Close middle column"
+                        visible="{= ${/actionButtonsInfo/midColumn/closeColumn} !== null }"
+                    />
+                </f:navigationActions>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <f:header>
+            <f:DynamicPageHeader pinnable="true">
+                <ObjectAttribute
+                    title="Source System"
+                    text="{detailDetailView>/sourceSystem}"
+                />
+            </f:DynamicPageHeader>
+        </f:header>
+
+        <f:content>
+            <IconTabBar
+                expanded="true"
+                class="sapUiResponsiveContentPadding"
+            >
+                <items>
+                    <IconTabFilter
+                        text="Items"
+                        key="items"
+                    >
+                        <Table
+                            id="itemsTable"
+                            mode="SingleSelectMaster"
+                            itemPress="onListItemPress"
+                            inset="false"
+                            items="{
+								path: 'localModel>/DocumentItems',
+								sorter: {
+									path: 'DocumentItem'
+									}
+								}"
+                            class="sapFDynamicPageAlignContent"
+                            width="auto"
+                        >
+                            <columns>
+                                <Column width="12em">
+                                    <Text text="Item" />
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text
+                                            text="{localModel>DocumentItem}"
+                                        />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </IconTabFilter>
+                    <IconTabFilter
+                        text="Process Flow"
+                        key="procFlow"
+                    >
+                        <core:Fragment
+                            fragmentName="phoron.prototype.view.ProcessFlow"
+                            type="XML"
+                        />
+                    </IconTabFilter>
+                </items>
+            </IconTabBar>
+        </f:content>
+    </f:DynamicPage>
+</mvc:View>

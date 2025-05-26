@@ -1,0 +1,39 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:g="sap.suite.ui.commons.networkgraph"
+    xmlns:core="sap.ui.core"
+>
+    <g:Graph
+        enableWheelZoom="false"
+        height="100%"
+        width="100%"
+        nodes="{localModel>/DocumentList}"
+        lines="{localModel>/DocumentFlow}"
+    >
+        <g:nodes>
+            <g:Node
+                key="{localModel>Document}"
+                title="{localModel>DocumentType}"
+                showActionLinksButton="false"
+                shape="Box"
+            >
+                <g:attributes>
+                    <g:ElementAttribute
+                        label="Document"
+                        value="{localModel>Document}"
+                    />
+                    <g:ElementAttribute
+                        label="Source System"
+                        value="{localModel>SourceSystem}"
+                    />
+                </g:attributes>
+            </g:Node>
+        </g:nodes>
+        <g:lines>
+            <g:Line
+                from="{localModel>PredDocument}"
+                to="{localModel>SuccDocument}"
+            />
+        </g:lines>
+    </g:Graph>
+</core:FragmentDefinition>
