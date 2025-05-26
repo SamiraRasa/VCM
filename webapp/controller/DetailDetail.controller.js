@@ -63,7 +63,7 @@ sap.ui.define([
 		_onDocumentMatched: function (oEvent) {
 			const mainDocument = oEvent.getParameter("arguments").mainDocument;
 			const document = oEvent.getParameter("arguments").document;
-			const aDocuments = this.getView().getModel("localModel").getProperty("/DocumentList");
+			const aDocuments = this.getView().getModel("localModel").getProperty("/DocumentNodes");
 			const oDocument = aDocuments.find((row) => row.Document === document);
 			const oViewModel = this.getView().getModel("detailDetailView");
 			const oLocalModel = this.getView().getModel("localModel");

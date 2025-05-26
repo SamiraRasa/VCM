@@ -15,7 +15,6 @@ sap.ui.define(
     return Controller.extend("phoron.prototype.controller.List", {
       onInit: function () {
         this.oRouter = this.getOwnerComponent().getRouter();
-        this._bDescendingSort = false;
 
         this._objectTypeLabels = {
           PO: "Purchase Order",
@@ -58,8 +57,9 @@ sap.ui.define(
   
           oLocalModel.setProperty("/DocumentFlow", oMockData);
           oLocalModel.setProperty("/DocumentList", this._listAllDocuments(oMockData, sDoc, sDocType, sSourceSyst));
+          oLocalModel.setProperty("/DocumentNodes", this._listAllDocuments(oMockData, "", "", ""));
           BusyIndicator.hide();
-        }.bind(this), 1000);
+        }.bind(this), 500);
 
 
         // oModel.read("/DocumentFlow", {
@@ -96,7 +96,7 @@ sap.ui.define(
 
         filteredLinks.forEach(link => {
           const predKey = `${link.PredDocument}`;
-          if (!documents.has(predKey)) {
+          if (!documents.has(predKey) && (rootDocument === '' || predKey === rootDocument)) {
             documents.set(predKey, {
               DocumentType: this._objectTypeLabels[link.PredObjectType] || link.PredObjectType,
               Document: link.PredDocument,
@@ -104,7 +104,7 @@ sap.ui.define(
             });
           }
           const succKey = `${link.SuccDocument}`;
-          if (!documents.has(succKey)) {
+          if (!documents.has(succKey) && (rootDocument === '' || succKey === rootDocument)) {
             documents.set(succKey, {
               DocumentType: this._objectTypeLabels[link.SuccObjectType] || link.SuccObjectType,
               Document: link.SuccDocument,

@@ -7,7 +7,7 @@
         enableWheelZoom="false"
         height="100%"
         width="100%"
-        nodes="{localModel>/DocumentList}"
+        nodes="{localModel>/DocumentNodes}"
         lines="{localModel>/DocumentFlow}"
     >
         <g:nodes>
