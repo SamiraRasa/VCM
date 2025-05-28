@@ -31,9 +31,17 @@ sap.ui.define([
 		onListItemPress: function (oEvent) {
 			const oViewModel = this.getView().getModel("detailView");
 			const mainDocument = oViewModel.getProperty("/document");
-			const documentPath = oEvent.getParameter("rowContext").getPath();
-			const document = this.getView().getModel("localModel").getProperty(documentPath).Document;
-            const aDocuments = this.getView().getModel("localModel").getProperty("/DocumentNodes");
+			let document;
+			
+			if (oEvent.getParameter && oEvent.getParameter("rowContext")) {
+				const documentPath = oEvent.getParameter("rowContext").getPath();
+				document = this.getView().getModel("localModel").getProperty(documentPath).Document;
+			}	 else {
+				const oContext = oEvent.getSource().getBindingContext("localModel");
+				document = oContext.getProperty("Document");
+      }
+      
+      const aDocuments = this.getView().getModel("localModel").getProperty("/DocumentNodes");
 
 			aDocuments.forEach((row) => {
 				if (row.Document === document) {
@@ -42,7 +50,7 @@ sap.ui.define([
 					row.Status = "Standard";
 				}
 			});
-
+			
 			this.oRouter.navTo("detailDetail", { layout: LayoutType.TwoColumnsMidExpanded, mainDocument: mainDocument, document: document });
 		},
 
