@@ -30,6 +30,16 @@ sap.ui.define(
           S2: "S/4 private",
           S3: "S/4 public"
         }
+
+        const that = this
+
+        this.getOwnerComponent()
+          .getService('ShellUIService')
+          .then(function (oShellService) {
+            oShellService.setBackNavigation(function () {
+              that._navBack();
+            });
+          });
       },
 
       onSearch: function (oEvent) {
@@ -85,6 +95,10 @@ sap.ui.define(
         this.oRouter.navTo("detail", { layout: LayoutType.OneColumn, document: document });
       },
 
+      _navBack: function () {
+        this.oRouter.navTo("list", {}, true);
+      },
+
       _listAllDocuments: function (documentLinks, rootDocument, rootDocumentType, rootSystem) {
         const filteredLinks = documentLinks.filter(link =>
           (rootDocument === '' || link.PredDocument === rootDocument || link.SuccDocument === rootDocument) &&
@@ -100,7 +114,8 @@ sap.ui.define(
             documents.set(predKey, {
               DocumentType: this._objectTypeLabels[link.PredObjectType] || link.PredObjectType,
               Document: link.PredDocument,
-              SourceSystem: this._sourceSystLabels[link.PredSystem] || link.PredSystem
+              SourceSystem: this._sourceSystLabels[link.PredSystem] || link.PredSystem,
+              Status: "Standard"
             });
           }
           const succKey = `${link.SuccDocument}`;
@@ -108,7 +123,8 @@ sap.ui.define(
             documents.set(succKey, {
               DocumentType: this._objectTypeLabels[link.SuccObjectType] || link.SuccObjectType,
               Document: link.SuccDocument,
-              SourceSystem: this._sourceSystLabels[link.SuccSystem] || link.SuccSystem
+              SourceSystem: this._sourceSystLabels[link.SuccSystem] || link.SuccSystem,
+              Status: "Standard"
             });
           }
         });

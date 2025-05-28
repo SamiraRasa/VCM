@@ -39,8 +39,18 @@ sap.ui.define([
 			}	 else {
 				const oContext = oEvent.getSource().getBindingContext("localModel");
 				document = oContext.getProperty("Document");
+      }
+      
+      const aDocuments = this.getView().getModel("localModel").getProperty("/DocumentNodes");
 
-			}
+			aDocuments.forEach((row) => {
+				if (row.Document === document) {
+					row.Status = "Success";
+				} else {
+					row.Status = "Standard";
+				}
+			});
+			
 			this.oRouter.navTo("detailDetail", { layout: LayoutType.TwoColumnsMidExpanded, mainDocument: mainDocument, document: document });
 		},
 
