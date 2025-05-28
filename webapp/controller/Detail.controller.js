@@ -39,9 +39,9 @@ sap.ui.define([
 			}	 else {
 				const oContext = oEvent.getSource().getBindingContext("localModel");
 				document = oContext.getProperty("Document");
-      }
+      		}
       
-      const aDocuments = this.getView().getModel("localModel").getProperty("/DocumentNodes");
+      		const aDocuments = this.getView().getModel("localModel").getProperty("/DocumentNodes");
 
 			aDocuments.forEach((row) => {
 				if (row.Document === document) {
