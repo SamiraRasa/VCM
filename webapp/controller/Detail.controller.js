@@ -26,22 +26,37 @@ sap.ui.define([
 			});
 
 			this.getView().setModel(oViewModel, "detailView");
+
+			this._objectTypeLabels = {
+				PO: "Purchase Order",
+				SO: "Sales Order",
+				OD: "Outbound Delivery",
+				BD: "Billing Document",
+				MD: "Material Document",
+				ID: "Inbound Delivery",
+				SI: "Supplier Invoice"
+			};
+			this._sourceSystLabels = {
+				S1: "ECC",
+				S2: "S/4 private",
+				S3: "S/4 public"
+			}
 		},
 
 		onListItemPress: function (oEvent) {
 			const oViewModel = this.getView().getModel("detailView");
 			const mainDocument = oViewModel.getProperty("/document");
 			let document;
-			
+
 			if (oEvent.getParameter && oEvent.getParameter("rowContext")) {
 				const documentPath = oEvent.getParameter("rowContext").getPath();
 				document = this.getView().getModel("localModel").getProperty(documentPath).Document;
-			}	 else {
+			} else {
 				const oContext = oEvent.getSource().getBindingContext("localModel");
 				document = oContext.getProperty("Document");
-      		}
-      
-      		const aDocuments = this.getView().getModel("localModel").getProperty("/DocumentNodes");
+			}
+
+			const aDocuments = this.getView().getModel("localModel").getProperty("/DocumentNodes");
 
 			aDocuments.forEach((row) => {
 				if (row.Document === document) {
@@ -50,7 +65,7 @@ sap.ui.define([
 					row.Status = "Standard";
 				}
 			});
-			
+
 			this.oRouter.navTo("detailDetail", { layout: LayoutType.TwoColumnsMidExpanded, mainDocument: mainDocument, document: document });
 		},
 
@@ -70,12 +85,19 @@ sap.ui.define([
 			const oLocalModel = this.getView().getModel("localModel");
 			const aDocFlow = oLocalModel.getProperty("/DocumentFlow");
 			const rootDocument = this._findFirstDocumentInHierarchy(aDocFlow, oDocument.Document);
+			const aHierarchy = this._buildHierarchy(aDocFlow, rootDocument, '', '');
+			const aRootDocuments = this._collectDocuments(aHierarchy);
+			const aLines = aDocFlow.filter(oDocFlow =>
+				(aRootDocuments.includes(oDocFlow.PredDocument) || aRootDocuments.includes(oDocFlow.SuccDocument))
+			);
 
 			oViewModel.setProperty("/document", oDocument.Document);
 			oViewModel.setProperty("/documentType", oDocument.DocumentType);
 			oViewModel.setProperty("/sourceSystem", oDocument.SourceSystem);
 
-			oLocalModel.setProperty("/DocumentTree", this._buildHierarchy(aDocFlow, rootDocument, '', ''));
+			oLocalModel.setProperty("/DocumentTree", aHierarchy);
+			oLocalModel.setProperty("/DocumentNodes", this._getDocuments(aDocFlow, aRootDocuments));
+			oLocalModel.setProperty("/DocumentLines", aLines);
 		},
 
 		_findFirstDocumentInHierarchy: function (documentLinks, targetDocument) {
@@ -90,6 +112,56 @@ sap.ui.define([
 				visited.add(current);
 				current = link.PredDocument;
 			}
+		},
+
+		_collectDocuments: function (nodes) {
+			const result = [];
+
+			function traverse(nodeList) {
+				for (const node of nodeList) {
+					if (node.Document) {
+						result.push(node.Document);
+					}
+
+					if (Array.isArray(node.Documents)) {
+						traverse(node.Documents);
+					}
+				}
+			}
+
+			traverse(nodes);
+			return result;
+		},
+
+		_getDocuments: function (documentLinks, aRootDocuments) {
+			const filteredLinks = documentLinks.filter(link =>
+				(aRootDocuments.includes('') || aRootDocuments.includes(link.PredDocument) || aRootDocuments.includes(link.SuccDocument))
+			);
+
+			const documents = new Map();
+
+			filteredLinks.forEach(link => {
+				const predKey = `${link.PredDocument}`;
+				if (!documents.has(predKey) && (aRootDocuments.includes('') || aRootDocuments.includes(predKey))) {
+					documents.set(predKey, {
+						DocumentType: this._objectTypeLabels[link.PredObjectType] || link.PredObjectType,
+						Document: link.PredDocument,
+						SourceSystem: this._sourceSystLabels[link.PredSystem] || link.PredSystem,
+						Status: "Standard"
+					});
+				}
+				const succKey = `${link.SuccDocument}`;
+				if (!documents.has(succKey) && (aRootDocuments.includes('') || aRootDocuments.includes(succKey))) {
+					documents.set(succKey, {
+						DocumentType: this._objectTypeLabels[link.SuccObjectType] || link.SuccObjectType,
+						Document: link.SuccDocument,
+						SourceSystem: this._sourceSystLabels[link.SuccSystem] || link.SuccSystem,
+						Status: "Standard"
+					});
+				}
+			});
+
+			return Array.from(documents.values());
 		},
 
 		_buildHierarchy: function (documentLinks, rootDocument, rootDocumentType, rootSystem) {

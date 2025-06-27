@@ -13,14 +13,6 @@
         id="dynamicPageId"
         toggleHeaderOnTitleClick="false"
     >
-        <!-- <f:title>
-            <f:DynamicPageTitle>
-                <f:heading>
-                    <Title text="Value Chain Monitor" />
-                </f:heading>
-            </f:DynamicPageTitle>
-        </f:title> -->
-
         <f:header>
             <f:DynamicPageHeader pinnable="true">
                 <f:content>

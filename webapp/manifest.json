@@ -9,6 +9,26 @@
         },
         "title": "{{appTitle}}",
         "description": "{{appDescription}}",
+        "dataSources": {
+            "ZUI_IC_HUB_DOCUMENTFLOW_O2_VAN": {
+                "uri": "/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Annotations(TechnicalName='ZUI_IC_HUB_DOCUMENTFLOW_O2_VAN',Version='0001')/$value/",
+                "type": "ODataAnnotation",
+                "settings": {
+                    "localUri": "localService/mainService/ZUI_IC_HUB_DOCUMENTFLOW_O2_VAN.xml"
+                }
+            },
+            "mainService": {
+                "uri": "/sap/opu/odata/sap/ZUI_IC_HUB_DOCUMENTFLOW_O2/",
+                "type": "OData",
+                "settings": {
+                    "annotations": [
+                        "ZUI_IC_HUB_DOCUMENTFLOW_O2_VAN"
+                    ],
+                    "localUri": "localService/mainService/metadata.xml",
+                    "odataVersion": "2.0"
+                }
+            }
+        },
         "sourceTemplate": {
             "id": "@sap/ux-app-migrator:freestyle",
             "version": "1.17.5",
@@ -39,6 +59,11 @@
                     "bundleName": "phoron.prototype.i18n.i18n"
                 }
             },
+            "odataModel": {
+                "dataSource": "mainService",
+                "preload": true,
+                "settings": {}
+            },
             "localModel": {
                 "type": "sap.ui.model.json.JSONModel",
                 "settings": {},
@@ -67,7 +92,6 @@
             "routes": [
                 {
                     "pattern": ":layout:",
-                    
                     "name": "list",
                     "target": [
                         "list"

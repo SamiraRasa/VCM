@@ -10,8 +10,8 @@ server:
         ignoreCertError: false
         backend:
           - path: /sap
-            url: https://my405452-api.s4hana.cloud.sap
-            destination: XR9_080_Dev_SAML
+            url: https://036d5ae0-52ea-4122-8723-be77e8523dad.abap.eu10.hana.ondemand.com
+            destination: ABAP_ENV_H01
         ui5:
           path:
             - /resources

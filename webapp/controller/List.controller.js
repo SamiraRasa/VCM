@@ -46,45 +46,20 @@ sap.ui.define(
 
         BusyIndicator.show(0);
         
-        setTimeout(function () {
-          const sDoc = this.byId("docIdInput").getValue();
-          const sDocType = this.byId("docTypeSelect").getSelectedKey();
-          const sSourceSyst = this.byId("sourceSystSelect").getSelectedKey();
-  
-          const oMockData = [
-            { PredSystem: "S1", PredObjectType: "PO", PredDocument: "4500000158", PredDocumentItem: "10", SuccSystem: "S2", SuccObjectType: "SO", SuccDocument: "60000028", SuccDocumentItem: "10" },
-            { PredSystem: "S1", PredObjectType: "PO", PredDocument: "4500000158", PredDocumentItem: "10", SuccSystem: "S2", SuccObjectType: "OD", SuccDocument: "80000146", SuccDocumentItem: "10" },
-            { PredSystem: "S2", PredObjectType: "OD", PredDocument: "80000146", PredDocumentItem: "10", SuccSystem: "S2", SuccObjectType: "BD", SuccDocument: "90000123", SuccDocumentItem: "1" },
-            { PredSystem: "S2", PredObjectType: "OD", PredDocument: "80000146", PredDocumentItem: "10", SuccSystem: "S2", SuccObjectType: "MD", SuccDocument: "4900000419", SuccDocumentItem: "1" },
-            { PredSystem: "S2", PredObjectType: "OD", PredDocument: "80000146", PredDocumentItem: "10", SuccSystem: "S1", SuccObjectType: "ID", SuccDocument: "180000049", SuccDocumentItem: "10" },
-            { PredSystem: "S2", PredObjectType: "BD", PredDocument: "90000123", PredDocumentItem: "1", SuccSystem: "S2", SuccObjectType: "SI", SuccDocument: "5105600178", SuccDocumentItem: "1" },
-            { PredSystem: "S2", PredObjectType: "MD", PredDocument: "4900000419", PredDocumentItem: "1", SuccSystem: "S2", SuccObjectType: "MD", SuccDocument: "4900000420", SuccDocumentItem: "1" },
-            { PredSystem: "S1", PredObjectType: "ID", PredDocument: "180000049", PredDocumentItem: "10", SuccSystem: "S1", SuccObjectType: "MD", SuccDocument: "5000000225", SuccDocumentItem: "1" },
-            { PredSystem: "S2", PredObjectType: "MD", PredDocument: "4900000420", PredDocumentItem: "1", SuccSystem: "S1", SuccObjectType: "MD", SuccDocument: "4900000421", SuccDocumentItem: "1" }
-          ];
-  
-          const oLocalModel = this.getView().getModel("localModel");
-  
-          oLocalModel.setProperty("/DocumentFlow", oMockData);
-          oLocalModel.setProperty("/DocumentList", this._listAllDocuments(oMockData, sDoc, sDocType, sSourceSyst));
-          oLocalModel.setProperty("/DocumentNodes", this._listAllDocuments(oMockData, "", "", ""));
-          BusyIndicator.hide();
-        }.bind(this), 500);
+        this.getView().getModel("odataModel").read("/DocumentFlow", {
+          success: function (oData) {
+            const oLocalModel = this.getView().getModel("localModel");
+            const sDoc = this.byId("docIdInput").getValue();
+            const sDocType = this.byId("docTypeSelect").getSelectedKey();
+            const sSourceSyst = this.byId("sourceSystSelect").getSelectedKey();
 
+            oLocalModel.setProperty("/DocumentFlow", oData.results);
+            oLocalModel.setProperty("/DocumentList", this._listAllDocuments(oData.results, sDoc, sDocType, sSourceSyst));
+            oLocalModel.setSizeLimit(1000);
 
-        // oModel.read("/DocumentFlow", {
-        //   success: function (oData) {
-        //     const oLocalModel = this.getView().getModel("localModel");
-        //     const sDoc = this.byId("docIdInput").getValue();
-        //     const sDocType = this.byId("docTypeSelect").getSelectedKey();
-        //     const sSourceSyst = this.byId("sourceSystSelect").getSelectedKey();
-
-        //     // oLocalModel.setProperty("/DocumentTree", this._buildHierarchy(oData.results, sDoc, sDocType, sSourceSyst));
-        //     oLocalModel.setProperty("/DocumentFlow", oData.results);
-        //     oLocalModel.setProperty("/DocumentList", this._listAllDocuments(oData.results, sDoc, sDocType, sSourceSyst));
-        //     BusyIndicator.hide();
-        //   }.bind(this)
-        // });
+            BusyIndicator.hide();
+          }.bind(this)
+        });
       },
 
       onListItemPress: function (oEvent) {
